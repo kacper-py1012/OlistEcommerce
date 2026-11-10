@@ -344,6 +344,8 @@ FULL OUTER JOIN (
 -- 4. Checking seller_city for values that do not look like a city name.
 -- Found 2, each in one row: 04482255 (digits) and an e-mail address. They come from the source data.
 -- Not fixing it here, it belongs to the data cleaning step.
+-- Fixed in 07_clean_core_tables.sql (replaced with city names matching zip_code_prefix from core.geolocation).
+-- Check: this query should now return 0 rows.
 SELECT
 	seller_city AS wrong_city_name,
 	COUNT(seller_city) AS [count]

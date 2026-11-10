@@ -3,15 +3,22 @@ GO
 
 -- Here I will load the data from the staging tables to core tables.
 -- First I need to delete (TRUNCATE) possibly existing data to execute following code correctly.
-TRUNCATE TABLE core.orders;
-TRUNCATE TABLE core.order_items;
-TRUNCATE TABLE core.customers;
-TRUNCATE TABLE core.payments;
-TRUNCATE TABLE core.reviews;
-TRUNCATE TABLE core.products;
-TRUNCATE TABLE core.sellers;
-TRUNCATE TABLE core.category_translation;
-TRUNCATE TABLE core.geolocation;
+DELETE FROM core.order_items;
+DELETE FROM core.payments;
+DELETE FROM core.reviews;
+DELETE FROM core.orders;
+DELETE FROM core.products;
+DELETE FROM core.customers;
+DELETE FROM core.sellers;
+DELETE FROM core.category_translation;
+
+DELETE FROM core.geolocation;
+IF EXISTS(
+	SELECT 1 FROM sys.identity_columns
+	WHERE object_id = OBJECT_ID (N'core.geolocation')
+		AND last_value IS NOT NULL
+)
+	DBCC CHECKIDENT (N'core.geolocation', RESEED, 0);
 
 -- Now the core tables are 100% ready to insert data.
 

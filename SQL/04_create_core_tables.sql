@@ -1,25 +1,26 @@
 USE OlistECommerce
 GO
 
--- Checking if schema named core already exists, if it does then query skips creating one.
+-- 1. Checking if schema named core already exists, if it does then query skips creating one.
 IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = 'core')
 	BEGIN 
 		EXEC ('CREATE SCHEMA core');
 END;
 GO
 
--- Dropping tables if they exist, which makes the query repeatable.
-DROP TABLE IF EXISTS core.customers;
-DROP TABLE IF EXISTS core.orders;
+-- 2. Dropping tables (Children / Dependent tables first, Parents last)
 DROP TABLE IF EXISTS core.order_items;
 DROP TABLE IF EXISTS core.payments;
 DROP TABLE IF EXISTS core.reviews;
+DROP TABLE IF EXISTS core.orders;
 DROP TABLE IF EXISTS core.products;
 DROP TABLE IF EXISTS core.sellers;
+DROP TABLE IF EXISTS core.customers;
 DROP TABLE IF EXISTS core.category_translation;
-DROP TABLE IF EXISTS core.geolocation
+DROP TABLE IF EXISTS core.geolocation;
+GO
 
--- Creating core tables with correct data types and primary keys.
+-- 3. Creating core tables with correct data types and primary keys.
 CREATE TABLE core.orders (
 	order_id NVARCHAR(32) PRIMARY KEY NOT NULL,
 	customer_id NVARCHAR(32) NOT NULL,
@@ -73,7 +74,7 @@ CREATE TABLE core.reviews (
 -- I fixed a typographical error in the word length.
 CREATE TABLE core.products (
 	product_id NVARCHAR(32) PRIMARY KEY NOT NULL,
-	product_category_name NVARCHAR(50),
+	product_category_name NVARCHAR(100),
 	product_name_length SMALLINT,
 	product_description_length INT,
 	product_photos_qty SMALLINT,

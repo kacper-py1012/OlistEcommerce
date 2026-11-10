@@ -25,4 +25,13 @@ WHERE NOT EXISTS (
 	FROM core.category_translation AS ct
 	WHERE ct.product_category_name = v.product_category_name
 );
-
+-- 2. Invalid city names in core.sellers.
+-- Two rows in the source data contain invalid seller_city values: digits ('04482255') and an email address ('vendas@creditparts.com.br').
+-- Fixed by assigning correct city names based on matching zip_code_prefix from core.geolocation.
+-- Check: point 4 in 06_validate_core_tables.sql should return 0 rows.
+UPDATE core.sellers
+    SET seller_city = CASE
+        WHEN seller_zip_code_prefix = 87025 THEN 'maringa'
+        WHEN seller_zip_code_prefix = 22790 THEN 'rio de janeiro'
+    END
+WHERE seller_zip_code_prefix IN (87025, 22790);
