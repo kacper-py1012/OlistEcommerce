@@ -52,7 +52,7 @@ Run them in this order:
 
 1. Download the CSV files to a local folder.
 2. In `03_bulk_import.sql` set `@data_path` to that folder.
-3. Run the scripts 01 to 05, then 07 and 08, in order.
+3. Run the scripts 01 to 05, then 07,08 and 06 last.
 4. Use the queries from `06` to check the results, one at a time (select and press F5). Running the whole file returns dozens of result sets, including heavy queries on `geolocation` (over 1 million rows).
 5. After `07`, run the related checks from `06` again to confirm the fixes.
 
