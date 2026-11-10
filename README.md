@@ -37,13 +37,13 @@ Run them in this order:
 
 |Script|What it does|
 |-|-|
-|`01\\\_create\\\_database.sql`|drops and creates the `OlistECommerce` database|
-|`02\\\_create\\\_tables.sql`|creates the staging tables|
-|`03\\\_bulk\\\_import.sql`|loads the CSV files into staging with `BULK INSERT`|
-|`04\\\_create\\\_core\\\_tables.sql`|creates the `core` schema and tables with types and primary keys|
-|`05\\\_load\\\_core.sql`|loads staging into core|
-|`06\\\_validate\\\_core\\\_tables.sql`|validation queries (read only)|
-|`07\\\_clean\\\_core\\\_tables.sql`|corrections of source data problems in core (run after 05, can be repeated)|
+|`01\_create\_database.sql`|drops and creates the `OlistECommerce` database|
+|`02\_create\_tables.sql`|creates the staging tables|
+|`03\_bulk\_import.sql`|loads the CSV files into staging with `BULK INSERT`|
+|`04\_create\_core\_tables.sql`|creates the `core` schema and tables with types and primary keys|
+|`05\_load\_core.sql`|loads staging into core|
+|`06\_validate\_core\_tables.sql`|validation queries (read only)|
+|`07\_clean\_core\_tables.sql`|corrections of source data problems in core (run after 05, can be repeated)|
 |`08\_add\_foreign\_keys.sql`|adds foreign key constraints across `core` tables (repeatable with `IF NOT EXISTS`)|
 
 ### How to run
@@ -56,7 +56,7 @@ Run them in this order:
 
 
 
-Note: `01\_create\_database.sql` deletes an existing `OlistECommerce` database together with its data. `05\_load\_core.sql` deletes existing rows from core tables (child tables first) before loading, so it can be repeated safely.
+Note: `01\\\_create\\\_database.sql` deletes an existing `OlistECommerce` database together with its data. `05\\\_load\\\_core.sql` deletes existing rows from core tables (child tables first) before loading, so it can be repeated safely.
 
 ## Validation
 
@@ -88,7 +88,7 @@ Problems that come from the dataset itself. They are documented in the validatio
 * `geolocation` has a surrogate key (`IDENTITY`), because one zip code appears in many rows.
 * Zip codes are `CHAR(5)`, so leading zeros are not lost.
 * Corrections of source data are made in a separate script (`07`), so core after `05` shows the source as it is and every change is documented. The script can be run many times.
-* Replaced `TRUNCATE` with `DELETE FROM` (children first) in `05\_load\_core.sql`. Once foreign keys are defined in the database, SQL Server forbids `TRUNCATE` on referenced tables, even if the child tables are empty.
+* Replaced `TRUNCATE` with `DELETE FROM` (children first) in `05\\\_load\\\_core.sql`. Once foreign keys are defined in the database, SQL Server forbids `TRUNCATE` on referenced tables, even if the child tables are empty.
 
 ## Status
 
@@ -106,11 +106,11 @@ Problems that come from the dataset itself. They are documented in the validatio
 
 
 
-\* Foreign keys: The cross-table checks found only one blocker (13 products without a category translation), which was resolved in `07\_clean\_core\_tables.sql`.
+\* Foreign keys: The cross-table checks found only one blocker (13 products without a category translation), which was resolved in `07\\\_clean\\\_core\\\_tables.sql`.
 
-\* Constraints are added as the final step (`08\_add\_foreign\_keys.sql`) after data loading and cleaning.
+\* Constraints are added as the final step (`08\\\_add\\\_foreign\\\_keys.sql`) after data loading and cleaning.
 
-\* To keep the pipeline repeatable without dropping constraints, `05\_load\_core.sql` uses ordered `DELETE FROM` statements instead of `TRUNCATE` (which is blocked by SQL Server on referenced tables).
+\* To keep the pipeline repeatable without dropping constraints, `05\\\_load\\\_core.sql` uses ordered `DELETE FROM` statements instead of `TRUNCATE` (which is blocked by SQL Server on referenced tables).
 
-\* The drop sequence in `04\_create\_core\_tables.sql` removes child tables first to respect foreign keys if the schema is rebuilt from scratch.
+\* The drop sequence in `04\\\_create\\\_core\\\_tables.sql` removes child tables first to respect foreign keys if the schema is rebuilt from scratch.
 
