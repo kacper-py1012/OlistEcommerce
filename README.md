@@ -4,7 +4,7 @@ A personal SQL project: loading the public Olist e-commerce dataset into SQL Ser
 
 ## Data
 
-The Olist e-commerce public dataset (Brazilian marketplace orders), available on Kaggle. It is a set of 9 CSV files:
+The Olist e-commerce public dataset (Brazilian marketplace orders), available on [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) or directly as a single ZIP archive from [GitHub Releases](https://github.com/kacper-py1012/OlistEcommerce/releases/download/v1.0.0/olist_dataset.zip). It is a set of 9 CSV files:
 
 |File|Content|
 |-|-|
@@ -18,7 +18,7 @@ The Olist e-commerce public dataset (Brazilian marketplace orders), available on
 |`product_category_name_translation.csv`|category names, Portuguese to English|
 |`olist_geolocation_dataset.csv`|zip code coordinates|
 
-The CSV files can be downloaded from Kaggle or directly as a single ZIP archive from [GitHub Releases](https://github.com/kacper-py1012/OlistEcommerce/releases/download/v1.0.0/olist_dataset.zip).
+The raw CSV files are not kept directly in repository commits to keep history lightweight; download the ZIP above or fetch them from Kaggle.
 
 ## Architecture
 
