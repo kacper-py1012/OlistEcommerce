@@ -18,7 +18,7 @@ The Olist e-commerce public dataset (Brazilian marketplace orders), available on
 |`product_category_name_translation.csv`|category names, Portuguese to English|
 |`olist_geolocation_dataset.csv`|zip code coordinates|
 
-The CSV files are not included in this repository.
+The CSV files can be downloaded from Kaggle or directly as a single ZIP archive from [GitHub Releases](https://github.com/kacper-py1012/OlistEcommerce/releases/download/v1.0.0/olist_dataset.zip).
 
 ## Architecture
 
@@ -51,7 +51,7 @@ Run them in this order:
 
 ## How to run
 
-1. Download the CSV files to a local folder.
+1. Download and extract the dataset from [GitHub Releases](https://github.com/kacper-py1012/OlistEcommerce/releases/download/v1.0.0/olist_dataset.zip) (or from Kaggle) to a local folder.
 2. In `03_bulk_import.sql` set `@data_path` to that folder.
 3. Run the scripts 01 to 05, then 07,08.
 4. Use the queries from `06` to check the results, one at a time (select and press F5). Running the whole file returns dozens of result sets, including heavy queries on `geolocation` (over 1 million rows).
