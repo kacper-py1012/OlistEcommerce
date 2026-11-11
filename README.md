@@ -47,6 +47,7 @@ Run them in this order:
 |`06_validate_core_tables.sql`|validation queries (read only)|
 |`07_clean_core_tables.sql`|corrections of source data problems in core (run after 05, can be repeated)|
 |`08_add_foreign_keys.sql`|adds foreign key constraints across `core` tables (repeatable with `IF NOT EXISTS`)|
+|`09_analysis.sql`|business analysis queries (revenue, categories, payments, delivery, geography)|
 
 ## How to run
 
@@ -55,6 +56,7 @@ Run them in this order:
 3. Run the scripts 01 to 05, then 07 and 08, in order.
 4. Use the queries from `06` to check the results, one at a time (select and press F5). Running the whole file returns dozens of result sets, including heavy queries on `geolocation` (over 1 million rows).
 5. After `07`, run the related checks from `06` again to confirm the fixes.
+6. Run `09_analysis.sql` to execute the business analysis queries.
 
 Note: `01_create_database.sql` deletes an existing `OlistECommerce` database together with its data. `05_load_core.sql` deletes existing rows from core tables (child tables first) before loading, so it can be repeated safely.
 
@@ -98,7 +100,7 @@ Problems that come from the dataset itself. They are documented in the validatio
 * [x] Cross-table checks (orphaned rows)
 * [x] Data cleaning step (missing category translations and invalid seller cities done, geolocation open)
 * [x] Foreign keys
-* [ ] Analytical queries
+* [x] Analytical queries
 
 ## Notes
 
@@ -106,4 +108,27 @@ Problems that come from the dataset itself. They are documented in the validatio
 * Constraints are added as the final step (`08_add_foreign_keys.sql`) after data loading and cleaning.
 * To keep the pipeline repeatable without dropping constraints, `05_load_core.sql` uses ordered `DELETE FROM` statements instead of `TRUNCATE` (which is blocked by SQL Server on referenced tables).
 * The drop sequence in `04_create_core_tables.sql` removes child tables first to respect foreign keys if the schema is rebuilt from scratch.
+
+## Key Findings
+
+### 1. Monthly Sales & Revenue Growth
+* Sales volume and revenue grew rapidly from late 2016 through mid-2017.
+* Freight costs grew proportionally alongside order volume and revenue.
+
+### 2. Top Product Categories
+* **Health & Beauty**, **Watches & Gifts**, and **Bed, Bath & Table** bring in the highest revenue (each over 1M BRL).
+* **Bed, Bath & Table** has the most orders overall, but **Watches & Gifts** makes similar money on roughly half the sales volume.
+
+### 3. Payment Methods
+* **Credit Card** is the most popular choice, used in ~77% of all orders (12.1M BRL total).
+* **Boleto** is second with ~20% of orders.
+* Percentages add up to more than 100% because customers often split one order across multiple payment types.
+
+### 4. Delivery Times & Delays
+* Real delivery takes **12 days** on average, well ahead of the **24 days** estimated for customers.
+* Only **8.11%** of orders arrived late because the platform sets very safe delivery estimates.
+
+### 5. Customer Locations
+* **Sao Paulo (SP)** is the biggest market, making up **~42%** of all completed orders.
+* The top three states (**SP, RJ, MG**) account for nearly two-thirds of all orders.
 
